@@ -109,7 +109,7 @@ def url_fetch(text):
 
 ############### APPEND NEW CHAT TO USER ID JSON FILE #################
 def write_chat(new_data, id):
-    with open("chats/"+id+".json",'r+') as file:
+    with open(id,'r+') as file:
           # First we load existing data into a dict.
         file_data = json.load(file)
         # Join new_data with file_data inside emp_details
@@ -171,9 +171,9 @@ def check_user():
     if isexist:
         # try:
         print(path," found!")
-        write_chat({"role":"user","content":prompt},ids)
+        write_chat({"role":"user","content":prompt},path)
         # print()
-        chats = get_chats(ids)
+        chats = get_chats(path)
         chats = chats[-3:]
         print(chats)
         send = gpt(chats)
@@ -203,16 +203,16 @@ def check_user():
                 print("we hare at 1")
                 # print("We got listing : ",listing)
                 write_chat({"role":"system","content":f"The properties in JSON"+str(listing)+" Now send this to User with some Detail and URLs make it proper message"},ids)
-                chats = get_chats(ids)
+                chats = get_chats(path)
                 chats = chats[-2:]
                 send = gpt(chats)
                 reply = send.choices[0].message.content
-                write_chat({"role":"assistant","content":reply},ids)    
+                write_chat({"role":"assistant","content":reply},path)    
                 return {"message":reply,"status":"OK"}
             else:
                 print("we hare at 2")
                 write_chat({"role":"user","content":prompt+"""make sure  to return it in '`{"city":"مكه"}`' formate """},ids)
-                chats = get_chats(ids)
+                chats = get_chats(path)
                 chats = chats[-2:]
                 print("Miss hoa h")
                 send = gpt(chats)
@@ -272,5 +272,5 @@ def clear_chatss():
 
 
 if __name__ == '__main__':
-    app.run(port=5002)
+    app.run(port=5002,host='0.0.0.0')
     
