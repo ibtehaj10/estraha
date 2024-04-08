@@ -271,7 +271,32 @@ def clear_chatss():
     except :
         return { "status":"error","message":"Something went wrong,chat doesn't exist" }
 
+################################ GET ALL USER'S IDs
+@app.route('/get_users', methods=['POST'])
+def extract_json_filenames():
+    """
+    Extracts the names of all JSON files in the specified directory,
+    removes their '.json' extensions, and returns a list of the names.
 
+    Parameters:
+    - directory: Path to the directory containing the JSON files.
+
+    Returns:
+    - A list of strings representing the names of the JSON files, without the '.json' extension.
+    """
+    # List to store the names of JSON files without extension
+    cwd = str(os.getcwd())+'//chats//'
+    json_filenames_without_extension = []
+    
+    # Iterate through all files in the specified directory
+    for filename in os.listdir(cwd):
+        # Check if the file is a JSON file by looking at its extension
+        if filename.endswith('.json'):
+            # Remove the '.json' extension and add it to the list
+            name_without_extension = os.path.splitext(filename)[0]
+            json_filenames_without_extension.append(name_without_extension)
+    
+    return json_filenames_without_extension
 
 if __name__ == '__main__':
     app.run(port=5002,host='0.0.0.0')
