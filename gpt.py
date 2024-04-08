@@ -82,7 +82,7 @@ def gpt(inp):
 
 ############    GET CHATS BY USER ID ##################
 def get_chats(id):
-    path = str(os.getcwd())+'//chats//'+id+'.json'
+    path = id
     isexist = os.path.exists(path)
     if isexist:
         data = pd.read_json(path)
@@ -174,9 +174,11 @@ def check_user():
         write_chat({"role":"user","content":prompt},path)
         # print()
         chats = get_chats(path)
-        chats = chats[-3:]
+        chats = chats[-6:]
         print(chats)
+        print("GETCHATS \n\n ",chats)
         send = gpt(chats)
+        
         reply = send.choices[0].message.content
         print("reply   ...............:  ",reply)
         if "`" in str(reply):
@@ -202,18 +204,18 @@ def check_user():
             if listing !=  'None':
                 print("we hare at 1")
                 # print("We got listing : ",listing)
-                write_chat({"role":"system","content":f"The properties in JSON"+str(listing)+" Now send this to User with some Detail and URLs make it proper message"},ids)
+                write_chat({"role":"system","content":f"The properties in JSON"+str(listing)+" Now send this to User with some Detail and URLs make it proper message"},path)
                 chats = get_chats(path)
-                chats = chats[-2:]
+                chats = chats[-6:]
                 send = gpt(chats)
                 reply = send.choices[0].message.content
                 write_chat({"role":"assistant","content":reply},path)    
                 return {"message":reply,"status":"OK"}
             else:
                 print("we hare at 2")
-                write_chat({"role":"user","content":prompt+"""make sure  to return it in '`{"city":"مكه"}`' formate """},ids)
+                write_chat({"role":"user","content":prompt+"""make sure  to return it in '`{"city":"مكه"}`' formate """},path)
                 chats = get_chats(path)
-                chats = chats[-2:]
+                chats = chats[-5:]
                 print("Miss hoa h")
                 send = gpt(chats)
                 get = fetch_content_between_backticks(str(reply))
