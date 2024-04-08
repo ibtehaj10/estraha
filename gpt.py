@@ -228,7 +228,7 @@ def check_user():
 
         else:
             print("reply    ",reply)
-            write_chat({"role":"assistant","content":reply},ids)
+            write_chat({"role":"assistant","content":reply},path)
             return {"message":reply,"status":"OK","images":[]}
         # except:
         #     return {"message":"something went wrong!","status":"404"}
