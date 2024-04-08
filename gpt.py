@@ -6,13 +6,16 @@ import pandas as pd
 import requests
 import os
 import re
-import openai
+from openai import OpenAI
 import json
 import jsonpickle
-
+from PIL import Image
 apikeys = apikey
 
 app = Flask(__name__)
+
+
+client = OpenAI(api_key=apikeys)
 
 
 
@@ -35,11 +38,16 @@ def findproperty_citywise(city):
     df = pd.DataFrame(get_listing())
     url = 'https://www.estraha.com/property-detail/'
     property = df.loc[df['vCity']==city ]
-    property = property.drop(['tContractData','iUserId','iCategoryId','vProperty','iCityId','iRegionId','eRegion','tDescription','vVideo','iViewOwner','iView','eFeaturedOwner'], axis=1)
+    property = property[['vProperty','eSwimmingPool','vAddress','eRegion','eSwimmingPool','tSwimingPool','image','eMonthPrice','vWeekdayPrice','iPropertyId']]
     property['URL'] = url + property['iPropertyId'].astype(str)
-    property = property.head()
-    property = property.to_string()
-    return property
+    
+    if property.empty:
+        print('NONE')
+        return "No Property found in this city"
+    else:
+        propertyy = property.sample(n=3)
+        property_sample = propertyy.to_string()
+        return property_sample
 
 
 
@@ -59,14 +67,14 @@ def gpt(inp):
             IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLOW THE INSTRUCTIONS
                
                when you have data in history then answer the questions of every query user do.
-               
+               Do not generate property data on your own 
     
               """}
     new_inp = inp
     new_inp.insert(0,systems)
-    print("inp : \n ",new_inp)
-    openai.api_key = apikeys
-    completion = openai.ChatCompletion.create(
+    # print("inp : \n ",new_inp)
+    # openai.api_key = apikeys
+    completion = client.chat.completions.create(
     model="gpt-4-turbo-preview", 
     messages=new_inp
     )
@@ -85,6 +93,48 @@ def get_chats(id):
 
 
 
+def url_fetch(text):    
+    url_pattern = r'https?://[^\s)\]]+'
+
+    # Finding all URLs in the string
+    urls = re.findall(url_pattern, text)
+
+    # Print the list of URLs
+    # for url in urls:
+    #     print(url)
+    return urls
+
+def image_converter(li):
+    base_url = 'https://www.estraha.com/assets/uploads/property_image/'
+# Replace 'input_image.webp' with the path to your .webp file
+    urls = []
+    print(li)
+    for i in li:
+
+        local_image_path = i.replace(base_url,'').replace('/','')
+        local_image_path = 'images/'+local_image_path
+        # Replace 'output_image.jpg' with the desired output path for the .jpg file
+        jpg_image_path = local_image_path.replace('.webp','.jpg')
+        response = requests.get(i)
+        print(response.content)
+        print(local_image_path)
+        # if response.status_code == 200:
+    # Open a local file in binary write mode
+        with open(local_image_path, 'wb') as file:
+            # Write the content of the response to the file
+            file.write(response.content)
+       # Open the .webp image
+        image = Image.open(local_image_path)
+
+        # Convert the image to RGB mode if it is not already, as JPEG does not support alpha channel
+        if image.mode in ("RGBA", "P", "LA"):
+            image = image.convert("RGB")
+
+        # Save the image in .jpg format
+        image.save(jpg_image_path, 'JPEG')
+
+        urls.append(jpg_image_path)
+    return urls
 
 
 ############### APPEND NEW CHAT TO USER ID JSON FILE #################
@@ -115,7 +165,7 @@ def str_to_json(json_str):
         return  json.loads(json_str)
     except json.JSONDecodeError:
         print("Error: The string could not be converted to JSON.")
-        return None
+        return 'None'
     
 
 
@@ -130,6 +180,9 @@ def fetch_content_between_backticks(text):
     Returns:
     - A list of strings found between backticks. Returns an empty list if no such text is found.
     """
+    text = text.replace("\n","")
+    text = text.replace("``","")
+    text = text.replace("json","")
     pattern = r"`(.*?)`"
     matches = re.findall(pattern, text)
     return matches
@@ -138,7 +191,7 @@ def fetch_content_between_backticks(text):
 ################################ CHECK IF USER IS ALREADY EXIST IF NOT CREATE ONE ELSE RETURN GPT REPLY ##################
 @app.route('/chat', methods=['POST'])
 def check_user():
-    
+    image_url = 'https://www.estraha.com/assets/uploads/property_image'
     ids = request.json['user_id']
     prompt = request.json['prompt']
     print("asd")
@@ -151,28 +204,60 @@ def check_user():
         write_chat({"role":"user","content":prompt},ids)
         # print()
         chats = get_chats(ids)
+        chats = chats[-3:]
         print(chats)
         send = gpt(chats)
         reply = send.choices[0].message.content
         print("reply   ...............:  ",reply)
         if "`" in str(reply):
-            get = fetch_content_between_backticks(str(reply))
-            print("We got Fetched from backlist : ",get)
-            jsons = str_to_json(str(get[0]))
-            print("We got JSON : ",jsons)
-            listing = findproperty_citywise(jsons['city'])
-            print("We got listing : ",listing)
-            write_chat({"role":"assistant","content":f"The properties in JSON"+str(listing)+" Now send this to User with some Detail and URLs make it proper message"},ids)
-            chats = get_chats(ids)
-            send = gpt(chats)
-            reply = send.choices[0].message.content
-            write_chat({"role":"assistant","content":reply},ids)
-            return {"message":reply,"status":"OK"}
-        # return 'None'
+
+            print('\n\nBacklist Found\n\n: ',reply)
+
+            try:
+                get = fetch_content_between_backticks(str(reply))
+                
+                print("We got Fetched from backlist : ",get)
+                listing = ""
+                jsons = str_to_json(str(get[0]))
+                print("We got JSON : ",jsons)
+                if jsons !=  'None':
+                    listing = findproperty_citywise(jsons['city'])
+                else:
+                    listing = 'None'
+                    print('Listing is NONE')
+            except:
+                # listing = None
+                pass
+            
+            if listing !=  'None':
+                print("we hare at 1")
+                # print("We got listing : ",listing)
+                write_chat({"role":"system","content":f"The properties in JSON"+str(listing)+" Now send this to User with some Detail and URLs make it proper message"},ids)
+                chats = get_chats(ids)
+                chats = chats[-2:]
+                send = gpt(chats)
+                reply = send.choices[0].message.content
+                write_chat({"role":"assistant","content":reply},ids)    
+                return {"message":reply,"status":"OK"}
+            else:
+                print("we hare at 2")
+                write_chat({"role":"user","content":prompt+"""make sure  to return it in '`{"city":"مكه"}`' formate """},ids)
+                chats = get_chats(ids)
+                chats = chats[-2:]
+                print("Miss hoa h")
+                send = gpt(chats)
+                get = fetch_content_between_backticks(str(reply))
+                print("We got Fetched from backlist : ",get)
+                jsons = str_to_json(str(get[0]))
+                print("We got JSON : ",jsons)
+                listing = findproperty_citywise(jsons['city'])
+                return {"message":reply,"status":"OK"}
+
+
         else:
             print("reply    ",reply)
             write_chat({"role":"assistant","content":reply},ids)
-            return {"message":reply,"status":"OK"}
+            return {"message":reply,"status":"OK","images":[]}
         # except:
         #     return {"message":"something went wrong!","status":"404"}
 
