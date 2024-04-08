@@ -82,7 +82,7 @@ def gpt(inp):
 
 ############    GET CHATS BY USER ID ##################
 def get_chats(id):
-    path = str(os.getcwd())+'\\chats\\'+id+'.json'
+    path = str(os.getcwd())+'//chats//'+id+'.json'
     isexist = os.path.exists(path)
     if isexist:
         data = pd.read_json(path)
@@ -283,7 +283,8 @@ def check_user():
 @app.route('/get_chats', methods=['POST'])
 def get_chatss():
     ids = request.json['user_id']
-    return jsonpickle.encode(get_chats(ids))
+    path = str(os.getcwd())+'//chats//'+ids+'.json'
+    return jsonpickle.encode(get_chats(path))
 
 ######################################################### clear chats
 @app.route('/delete_chats', methods=['POST'])
@@ -291,7 +292,7 @@ def clear_chatss():
     ids = request.json['user_id']
 
     try:
-        path =os.remove(str(os.getcwd())+'\\chats\\'+ids+'.json')
+        path =os.remove(str(os.getcwd())+'//chats//'+ids+'.json')
      
         return {"status":"OK","message":"success"}
  
