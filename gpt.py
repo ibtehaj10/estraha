@@ -9,7 +9,7 @@ import re
 from openai import OpenAI
 import json
 import jsonpickle
-from PIL import Image
+# from PIL import Image
 apikeys = apikey
 
 app = Flask(__name__)
@@ -104,37 +104,7 @@ def url_fetch(text):
     #     print(url)
     return urls
 
-def image_converter(li):
-    base_url = 'https://www.estraha.com/assets/uploads/property_image/'
-# Replace 'input_image.webp' with the path to your .webp file
-    urls = []
-    print(li)
-    for i in li:
 
-        local_image_path = i.replace(base_url,'').replace('/','')
-        local_image_path = 'images/'+local_image_path
-        # Replace 'output_image.jpg' with the desired output path for the .jpg file
-        jpg_image_path = local_image_path.replace('.webp','.jpg')
-        response = requests.get(i)
-        print(response.content)
-        print(local_image_path)
-        # if response.status_code == 200:
-    # Open a local file in binary write mode
-        with open(local_image_path, 'wb') as file:
-            # Write the content of the response to the file
-            file.write(response.content)
-       # Open the .webp image
-        image = Image.open(local_image_path)
-
-        # Convert the image to RGB mode if it is not already, as JPEG does not support alpha channel
-        if image.mode in ("RGBA", "P", "LA"):
-            image = image.convert("RGB")
-
-        # Save the image in .jpg format
-        image.save(jpg_image_path, 'JPEG')
-
-        urls.append(jpg_image_path)
-    return urls
 
 
 ############### APPEND NEW CHAT TO USER ID JSON FILE #################
