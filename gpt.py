@@ -10,11 +10,12 @@ from openai import OpenAI
 import json
 import jsonpickle
 # from PIL import Image
+from flask_cors import CORS, cross_origin
 apikeys = apikey
 
 app = Flask(__name__)
 
-
+cors = CORS(app)
 client = OpenAI(api_key=apikeys)
 
 
@@ -160,6 +161,7 @@ def fetch_content_between_backticks(text):
 
 ################################ CHECK IF USER IS ALREADY EXIST IF NOT CREATE ONE ELSE RETURN GPT REPLY ##################
 @app.route('/chat', methods=['POST'])
+@cross_origin()
 def check_user():
     image_url = 'https://www.estraha.com/assets/uploads/property_image'
     ids = request.json['user_id']
@@ -253,6 +255,7 @@ def check_user():
 
 ####################   NEW ENPOINT GET CHATS ##############################
 @app.route('/get_chats', methods=['POST'])
+@cross_origin()
 def get_chatss():
     ids = request.json['user_id']
     path = str(os.getcwd())+'//chats//'+ids+'.json'
@@ -260,6 +263,7 @@ def get_chatss():
 
 ######################################################### clear chats
 @app.route('/delete_chats', methods=['POST'])
+@cross_origin()
 def clear_chatss():
     ids = request.json['user_id']
 
@@ -273,6 +277,7 @@ def clear_chatss():
 
 ################################ GET ALL USER'S IDs
 @app.route('/get_users', methods=['POST'])
+@cross_origin()
 def extract_json_filenames():
     """
     Extracts the names of all JSON files in the specified directory,
