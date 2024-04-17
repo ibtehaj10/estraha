@@ -212,8 +212,9 @@ def check_user():
                 chats = chats[-6:]
                 send = gpt(chats)
                 reply = send.choices[0].message.content
-                write_chat({"role":"assistant","content":reply},path)    
-                return {"message":reply,"status":"OK"}
+                write_chat({"role":"assistant","content":reply},path)   
+                return Response(reply, mimetype='text/html')
+                # return {"message":reply,"status":"OK"}
             else:
                 print("we hare at 2")
                 write_chat({"role":"user","content":prompt+"""make sure  to return it in '`{"city":"مكه"}`' formate """},path)
@@ -226,13 +227,15 @@ def check_user():
                 jsons = str_to_json(str(get[0]))
                 print("We got JSON : ",jsons)
                 listing = findproperty_citywise(jsons['city'])
-                return {"message":reply,"status":"OK"}
+                return Response(reply, mimetype='text/html')
+                # return {"message":reply,"status":"OK"}
 
 
         else:
             print("reply    ",reply)
             write_chat({"role":"assistant","content":reply},path)
-            return {"message":reply,"status":"OK","images":[]}
+            return Response(reply, mimetype='text/html')
+            # return {"message":reply,"status":"OK","images":[]}
         # except:
         #     return {"message":"something went wrong!","status":"404"}
 
