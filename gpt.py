@@ -215,6 +215,7 @@ def check_user():
                 reply = send.choices[0].message.content
                 write_chat({"role":"assistant","content":reply},path)   
                 # return Response(reply, mimetype='text/html')
+                reply = reply.replace("<b>","<br><b>")
                 return {"message":reply,"status":"OK"}
             else:
                 print("we hare at 2")
@@ -229,6 +230,7 @@ def check_user():
                 print("We got JSON : ",jsons)
                 listing = findproperty_citywise(jsons['city'])
                 # return Response(reply, mimetype='text/html')
+                reply = reply.replace("<b>","<br><b>")
                 return {"message":reply,"status":"OK"}
 
 
