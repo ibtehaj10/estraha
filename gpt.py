@@ -69,6 +69,7 @@ def gpt(inp):
                
                when you have data in history then answer the questions of every query user do.
                Do not generate property data on your own 
+               you are integrated in a website so act like html format
     
               """}
     new_inp = inp
