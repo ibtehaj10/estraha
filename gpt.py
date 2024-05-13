@@ -258,7 +258,7 @@ def check_user():
         with open(path, "w") as outfile:
             outfile.write(json_object)
         reply = check_user()
-        return Response(reply, mimetype='text/html')
+        return reply
 ####################   NEW ENPOINT GET CHATS ##############################
 @app.route('/get_chats', methods=['POST'])
 @cross_origin()
