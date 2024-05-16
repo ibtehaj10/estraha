@@ -25,7 +25,7 @@ def get_listing():
 
     url = "https://www.estraha.com/api/property_listing"
 
-    payload = {}
+    payload = {'eChatBot': 'Yes'}
     headers = {
     }
 
@@ -38,8 +38,8 @@ def get_listing():
 def findproperty_citywise(city):
     df = pd.DataFrame(get_listing())
     url = 'https://www.estraha.com/property-detail/'
-    property = df.loc[df['vCity']==city ]
-    property = property[['vProperty','eSwimmingPool','vAddress','eRegion','eSwimmingPool','tSwimingPool','image','eMonthPrice','vWeekdayPrice','iPropertyId']]
+    property = df.loc[df['City']==city ]
+    #property = property[['vProperty','eSwimmingPool','vAddress','eRegion','eSwimmingPool','tSwimingPool','image','eMonthPrice','vWeekdayPrice','iPropertyId']]
     property['URL'] = url + property['iPropertyId'].astype(str)
     
     if property.empty:
