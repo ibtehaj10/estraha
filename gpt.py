@@ -62,7 +62,7 @@ def gpt(inp):
               you'll get the data when you call a funtion name check_propty that can only one param city.
             so whenever user ask about any property you need to ask the city and return the ONLY city name in arabic in json with ```
               
-              for e.g:IMPORTANT  `{"city":"مكه"}`   '`' is important you'll get data when you use  `
+              for e.g:IMPORTANT  `{"city":"مكه"}`   '`' is important you'll get data when you use,  don't send any region or anything else with city name`
              IMPORTANT :  Do not generate any property details from your data use our data only if you dont get any property just say you dont find the property in database.
              \
              when you have all the properties then recommend it to user with some details and  URLs in a proper message then answer the questions related to data 
@@ -156,6 +156,7 @@ def fetch_content_between_backticks(text):
     """
     text = text.replace("\n","")
     text = text.replace("``","")
+    text = text.replace("`","")
     text = text.replace("json","")
     pattern = r"`(.*?)`"
     matches = re.findall(pattern, text)
