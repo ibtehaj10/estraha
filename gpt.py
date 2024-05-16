@@ -240,7 +240,7 @@ def check_user():
             print("reply    ",reply)
             write_chat({"role":"assistant","content":reply},path)
             # return Response(reply, mimetype='text/html')
-            return {"message":reply,"status":"OK","images":[]}
+            # return {"message":reply,"status":"OK","images":[]}
         # except:
         #     return {"message":"something went wrong!","status":"404"}
 
