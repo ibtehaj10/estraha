@@ -1,3 +1,4 @@
+
 from api import apikey
 from flask import Flask, request, jsonify,Response
 import pandas as pd
@@ -239,7 +240,7 @@ def check_user():
         else:
             print("reply    ",reply)
             write_chat({"role":"assistant","content":reply},path)
-            # return Response(reply, mimetype='text/html')
+            return Response(reply, mimetype='text/html')
             # return {"message":reply,"status":"OK","images":[]}
         # except:
         #     return {"message":"something went wrong!","status":"404"}
