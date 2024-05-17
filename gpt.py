@@ -3,8 +3,10 @@ from api import apikey
 from flask import Flask, request, jsonify,Response
 import pandas as pd
 from csv import writer
+from langchain.embeddings import OpenAIEmbeddings
 import pandas as pd
 import requests
+from langchain.vectorstores import Chroma
 import os
 import re
 from openai import OpenAI
@@ -27,6 +29,23 @@ client = OpenAI(api_key=apikeys)
 
 
 
+embeddings = OpenAIEmbeddings(openai_api_key=apikeys)
+db = Chroma(persist_directory="mydb", embedding_function=embeddings)
+
+
+##############################  Venctor search
+def retrieve_combined_documents(query, max_combined_docs=4):
+    retriever = db.as_retriever(search_type="mmr")
+
+    rev_doc = retriever.get_relevant_documents(query)
+    lim_rev_doc = rev_doc[:max_combined_docs]
+
+    docs = db.similarity_search(query)
+    lim_docs = docs[:max_combined_docs]
+
+    combined_docs = str(lim_rev_doc) + str(lim_docs)
+    return combined_docs
+    # combined_docs=db.similarity_search(query)
 ####################################### GET ALL THE LISTING
 def get_listing():
 
@@ -46,7 +65,9 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
     encoding = tiktoken.get_encoding(encoding_name)
     num_tokens = len(encoding.encode(string))
     return num_tokens
-######################################### Fetch Propertiies with respect to cites
+
+
+
 def findproperty_citywise(city):
     df = pd.DataFrame(get_listing())
     url = 'https://www.estraha.com/property-detail/'
@@ -69,14 +90,8 @@ def findproperty_citywise(city):
             property_sample = property.to_string()
             return property_sample
             
-
-
-
-
-
-
 ############## GPT PROMPT ####################
-def gpt(inp):
+def gpt(inp,prompt):
     systems = {"role": "system", "content": """ 
               you are a propty recommendation assitant your job is to assist user from the given properties.
               you'll get the data when you call a funtion name check_propty that can only one param city.
@@ -95,7 +110,10 @@ def gpt(inp):
     
               """}
     new_inp = inp
+    rcd = retrieve_combined_documents(prompt)
+    systems2 = {"role":"system","content":str(rcd)}
     new_inp.insert(0,systems)
+    new_inp.insert(0,systems2)
     count = num_tokens_from_string(str(new_inp), "cl100k_base")
     print("Total Token Counts are : ",count)
     completion = client.chat.completions.create(
@@ -191,7 +209,7 @@ def check_user():
     ids = request.json['user_id']
     prompt = request.json['prompt']
     print("asd")
-    path = str(os.getcwd())+'//chats//'+str(ids)+'.json'
+    path = str(os.getcwd())+'//chats//'+ids+'.json'
     # path = str(os.getcwd())+'\\'+"5467484.json"
     isexist = os.path.exists(path)
     if isexist:
@@ -203,7 +221,7 @@ def check_user():
         chats = chats[-6:]
         print(chats)
         print("GETCHATS \n\n ",chats)
-        send = gpt(chats)
+        send = gpt(chats,prompt)
         
         reply = send.choices[0].message.content
         print("reply   ...............:  ",reply)
@@ -234,7 +252,7 @@ def check_user():
                 write_chat({"role":"system","content":f"The properties in JSON"+str(listing)+" Now send this to User with some Detail and URLs make it proper message"},path)
                 chats = get_chats(path)
                 chats = chats[-6:]
-                send = gpt(chats)
+                send = gpt(chats,prompt)
                 reply = send.choices[0].message.content
                 write_chat({"role":"assistant","content":reply},path)   
                 # return Response(reply, mimetype='text/html')
@@ -246,7 +264,7 @@ def check_user():
                 chats = get_chats(path)
                 chats = chats[-5:]
                 print("Miss hoa h")
-                send = gpt(chats)
+                send = gpt(chats,prompt)
                 get = fetch_content_between_backticks(str(reply))
                 print("We got Fetched from backlist : ",get)
                 jsons = str_to_json(str(get[0]))
@@ -260,7 +278,7 @@ def check_user():
         else:
             print("reply    ",reply)
             write_chat({"role":"assistant","content":reply},path)
-            return {"message":reply,"status":"OK"}
+            return Response(reply, mimetype='text/html')
             # return {"message":reply,"status":"OK","images":[]}
         # except:
         #     return {"message":"something went wrong!","status":"404"}
