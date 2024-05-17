@@ -55,6 +55,7 @@ IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLO
     if rcd != []:
         systems2 = {"role":"system","content":str(rcd)}
         new_inp.insert(1,systems2)
+        print(rcd)
     
 
     
