@@ -117,8 +117,8 @@ def check_user():
         print(chats)
         send = gpt(chats,prompt)
         reply = send.choices[0].message.content
-        print("reply    ",reply.content)
-        write_chat({"role":"assistant","content":reply.content},path)
+        print("reply    ",reply)
+        write_chat({"role":"assistant","content":reply},path)
         return {"message":reply,"status":"OK"}
         # except:
         #     return {"message":"something went wrong!","status":"404"}
