@@ -95,7 +95,7 @@ def write_chat(new_data, id):
 
 
 ################################ CHECK IF USER IS ALREADY EXIST IF NOT CREATE ONE ELSE RETURN GPT REPLY ##################
-@app.route('/api', methods=['POST'])
+@app.route('/chat', methods=['POST'])
 def check_user():
     
     ids = request.json['user_id']
