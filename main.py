@@ -5,7 +5,7 @@ from csv import writer
 
 import os
 import time
-import openai
+from openai import OpenAI
 import json
 import jsonpickle
 from langchain.document_loaders import PyPDFLoader
@@ -61,8 +61,8 @@ IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLO
     print("inp : \n ",new_inp)
     openai.api_key = apikeys
     print('&&&&&&&&&&&&^^^^^^^^^^^^%$######################$%^&*((((((((((((((()))))))))))))))')
-    completion = openai.ChatCompletion.create(
-    model="gpt-4-1106-preview", 
+    completion = client.chat.completions.create(
+    model="gpt-4-turbo", 
     messages=new_inp
     )
     return completion
