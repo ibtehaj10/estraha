@@ -48,8 +48,8 @@ def findproperty_citywise(city):
         return "No Property found in this city"
     else:
         print(property)
-        if len(property) > 5: 
-            propertyy = property.sample(n=6)
+        if len(property) > 3: 
+            propertyy = property.sample(n=4)
             property_sample = property.to_string()
             return property_sample
         else:
