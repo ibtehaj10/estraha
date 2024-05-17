@@ -51,11 +51,11 @@ IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLO
     new_inp = inp
     new_inp.insert(0,systems)
     rcd = retrieve_combined_documents(prompt)
+    # print(rcd)
+    # if rcd != []:
+    systems2 = {"role":"system","content":str(rcd)}
+    new_inp.insert(1,systems2)
     print(rcd)
-    if rcd != []:
-        systems2 = {"role":"system","content":str(rcd)}
-        new_inp.insert(1,systems2)
-        print(rcd)
     
 
     
