@@ -54,7 +54,7 @@ IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLO
         new_inp.insert(1,systems2)
     
         new_inp = inp
-        new_inp.insert(0,systems)
+    new_inp.insert(0,systems)
     
 
     print("inp : \n ",new_inp)
