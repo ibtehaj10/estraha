@@ -87,7 +87,7 @@ def gpt(inp):
     # print("inp : \n ",new_inp)
     # openai.api_key = apikeys
     completion = client.chat.completions.create(
-    model="gpt-4-turbo-preview", 
+    model="gpt-4-turbo", 
     messages=new_inp
     )
     return completion
