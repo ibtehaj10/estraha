@@ -100,9 +100,9 @@ def check_user():
     
     ids = request.json['user_id']
     prompt = request.json['prompt']
-    status = request.json['status']
+    # status = request.json['status']
     print("asd")
-    path = str(os.getcwd())+'//chats//'+ids+'.json'
+    path = str(os.getcwd())+'//chats//'+str(ids)+'.json'
     # path = str(os.getcwd())+'\\'+"5467484.json"
     isexist = os.path.exists(path)
     if isexist:
@@ -112,7 +112,7 @@ def check_user():
         # print()
         chats = get_chats(path)
         print(chats)
-        send = gpt(chats,prompt,status)
+        send = gpt(chats,prompt)
         reply = send.choices[0].message
         print("reply    ",reply.content)
         write_chat({"role":"assistant","content":reply.content},path)
