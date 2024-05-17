@@ -206,6 +206,7 @@ def check_user():
                     print('Listing is NONE')
             except:
                 # listing = None
+                print("JSON CANT BE FETCHED.....!!!")
                 pass
             
             if listing !=  'None':
