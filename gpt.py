@@ -49,8 +49,9 @@ def findproperty_citywise(city):
     else:
         print(property)
         if len(property) > 3: 
-            propertyy = property.sample(n=4)
+            propertyy = property.sample(n=3)
             property_sample = property.to_string()
+            print("3 Samples")
             return property_sample
         else:
             # propertyy = property.sample(n=6)
