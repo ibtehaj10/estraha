@@ -116,7 +116,7 @@ def check_user():
         chats = get_chats(path)
         print(chats)
         send = gpt(chats,prompt)
-        reply = send.choices[0].message
+        reply = send.choices[0].message.content
         print("reply    ",reply.content)
         write_chat({"role":"assistant","content":reply.content},path)
         return {"message":reply,"status":"OK"}
