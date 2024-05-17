@@ -2,7 +2,7 @@ from api import apikey
 from flask import Flask, request, jsonify
 import pandas as pd
 from csv import writer
-
+from flask_cors import CORS, cross_origin
 import os
 import time
 from openai import OpenAI
