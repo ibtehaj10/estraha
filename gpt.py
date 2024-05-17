@@ -41,7 +41,7 @@ def findproperty_citywise(city):
     url = 'https://www.estraha.com/property-detail/'
     property = df.loc[df['City']==city ]
     #property = property[['vProperty','eSwimmingPool','vAddress','eRegion','eSwimmingPool','tSwimingPool','image','eMonthPrice','vWeekdayPrice','iPropertyId']]
-    property['URL'] = url + property['iPropertyId'].astype(str)
+    property['URL'] = url + property['property ID'].astype(str)
     
     if property.empty:
         print('NONE')
