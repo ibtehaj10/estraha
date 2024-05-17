@@ -39,7 +39,7 @@ def retrieve_combined_documents(query, max_combined_docs=4):
 
     return combined_docs
 
-
+rcd = ""
 ############## GPT PROMPT ####################
 def gpt(inp,prompt):
     
@@ -48,14 +48,15 @@ def gpt(inp,prompt):
 IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLOW THE INSTRUCTIONS
 """}
     rcd = retrieve_combined_documents(prompt)
-    systems2 = {"role":"system","content":str(rcd)}
-    systems3 = {"role":"system","content":"IMPORTANT : be concise as possible and do not says anything like you dont have the context or thing do not mention in document. If you cant find anything about question just redirect user to support@metutors.com email."}
-    systems4 = {"role":"system","content":"The user is {}. answer him accordingly".format(status)}
-    new_inp = inp
-    new_inp.insert(0,systems)
-    new_inp.insert(1,systems2)
-    new_inp.insert(2,systems3)
-    new_inp.insert(3,systems4)
+    print(rcd)
+    if rcd != []:
+        systems2 = {"role":"system","content":str(rcd)}
+        new_inp.insert(1,systems2)
+    
+        new_inp = inp
+        new_inp.insert(0,systems)
+    
+
     print("inp : \n ",new_inp)
     openai.api_key = apikeys
     print('&&&&&&&&&&&&^^^^^^^^^^^^%$######################$%^&*((((((((((((((()))))))))))))))')
