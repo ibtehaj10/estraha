@@ -69,26 +69,36 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
 
 
 def findproperty_citywise(city):
-    df = pd.DataFrame(get_listing())
+    js = get_listing()
+    js = filtered_data = [record for record in js if record['City'].lower() == 'الرياض']
     url = 'https://www.estraha.com/property-detail/'
-    property = df.loc[df['City']==city ]
-    #property = property[['vProperty','eSwimmingPool','vAddress','eRegion','eSwimmingPool','tSwimingPool','image','eMonthPrice','vWeekdayPrice','iPropertyId']]
-    property['URL'] = url + property['property ID'].astype(str)
+    for record in js:
+        record['URL'] = url + str(record['property ID'])
+    return str(js[:6])
     
-    if property.empty:
-        print('NONE')
-        return "No Property found in this city"
-    else:
-        print(property)
-        if len(property) > 3: 
-            propertyy = property.sample(n=3)
-            property_sample = property.to_string()
-            print("3 Samples")
-            return property_sample
-        else:
-            # propertyy = property.sample(n=6)
-            property_sample = property.to_string()
-            return property_sample
+    
+    
+    # df = pd.DataFrame(get_listing())
+    # url = 'https://www.estraha.com/property-detail/'
+    # property = df.loc[df['City']==city ]
+    # #property = property[['vProperty','eSwimmingPool','vAddress','eRegion','eSwimmingPool','tSwimingPool','image','eMonthPrice','vWeekdayPrice','iPropertyId']]
+    # # property['URL'] = url + property['property ID'].astype(str)
+    
+    # # if property.empty:
+    # #     print('NONE')
+    # #     return "No Property found in this city"
+    # # else:
+    # #     print(property)
+    # #     if len(property) > 3: 
+    # #         propertyy = property.sample(n=2)
+    # #         property_sample = propertyy
+    # #         property_json= property.to_json()
+    # #         print("3 Samples")
+    # #         return property_json
+    # #     else:
+    # #         # propertyy = property.sample(n=6)
+    # #         property_sample = property.to_string()
+    # #         return property_sample
             
 ############## GPT PROMPT ####################
 def gpt(inp,prompt):
@@ -151,7 +161,7 @@ def url_fetch(text):
 
 ############### APPEND NEW CHAT TO USER ID JSON FILE #################
 def write_chat(new_data, id):
-    with open(id,'r+') as file:
+    with open(id,'r+', encoding='utf-8') as file:
           # First we load existing data into a dict.
         file_data = json.load(file)
         # Join new_data with file_data inside emp_details
@@ -159,7 +169,8 @@ def write_chat(new_data, id):
         # Sets file's current position at offset.
         file.seek(0)
         # convert back to json.
-        json.dump(file_data, file, indent = 4)
+
+        json.dump(file_data, file, ensure_ascii=False, indent=4)
 
 
 ####################################### Funtion to convert str to JSON
@@ -209,7 +220,7 @@ def check_user():
     ids = request.json['user_id']
     prompt = request.json['prompt']
     print("asd")
-    path = str(os.getcwd())+'//chats//'+str(ids)+'.json'
+    path = str(os.getcwd())+'\\chats\\'+str(ids)+'.json'
     # path = str(os.getcwd())+'\\'+"5467484.json"
     isexist = os.path.exists(path)
     if isexist:
@@ -278,7 +289,7 @@ def check_user():
         else:
             print("reply    ",reply)
             write_chat({"role":"assistant","content":reply},path)
-            return Response(reply, mimetype='text/html')
+            return {"message":reply,"status":"OK"}
             # return {"message":reply,"status":"OK","images":[]}
         # except:
         #     return {"message":"something went wrong!","status":"404"}
