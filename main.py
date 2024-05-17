@@ -44,10 +44,8 @@ def retrieve_combined_documents(query, max_combined_docs=4):
 def gpt(inp,prompt,status):
     
     systems = {"role":"system","content":"""
-your name is Daina MEtutors platform bot and you are integrated on ME tutors platform. you job is to answer users query by using given context.
-    if user ask in Arabic language your answers must be in Arabic otherwise in english. use the given data to generate answer. if you cant find any relevent information redirect user to amil on this for support support@metutors.com 
-
-    you have to provide subjects and programs ME tutor offers as well as there prices. and rember to be concise as possible dont try to make up answers 
+              you are a propty recommendation assitant your job is to assist user from the given properties.
+IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLOW THE INSTRUCTIONS
 """}
     rcd = retrieve_combined_documents(prompt)
     systems2 = {"role":"system","content":str(rcd)}
