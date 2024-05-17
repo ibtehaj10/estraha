@@ -49,7 +49,7 @@ def findproperty_citywise(city):
     else:
         print(property)
         # propertyy = property.sample(n=10)
-        property_sample = propertyy.to_string()
+        property_sample = property.to_string()
         return property_sample
 
 
