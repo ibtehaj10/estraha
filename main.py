@@ -17,7 +17,8 @@ from langchain.chat_models import ChatOpenAI
 apikeys = apikey
 
 app = Flask(__name__)
-
+cors = CORS(app)
+client = OpenAI(api_key=apikeys)
 
 embeddings = OpenAIEmbeddings(openai_api_key=apikeys)
 db = Chroma(persist_directory="mydb", embedding_function=embeddings)
@@ -59,7 +60,7 @@ IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLO
     
 
     print("inp : \n ",new_inp)
-    openai.api_key = apikeys
+    # openai.api_key = apikeys
     print('&&&&&&&&&&&&^^^^^^^^^^^^%$######################$%^&*((((((((((((((()))))))))))))))')
     completion = client.chat.completions.create(
     model="gpt-4-turbo", 
