@@ -157,7 +157,7 @@ def fetch_content_between_backticks(text):
     """
     text = text.replace("\n","")
     text = text.replace("``","")
-    text = text.replace("`","")
+    # text = text.replace("`","")
     text = text.replace("json","")
     pattern = r"`(.*?)`"
     matches = re.findall(pattern, text)
