@@ -41,7 +41,7 @@ def retrieve_combined_documents(query, max_combined_docs=4):
 
 
 ############## GPT PROMPT ####################
-def gpt(inp,prompt,status):
+def gpt(inp,prompt):
     
     systems = {"role":"system","content":"""
               you are a propty recommendation assitant your job is to assist user from the given properties.
