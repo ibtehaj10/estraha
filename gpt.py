@@ -191,7 +191,7 @@ def check_user():
     ids = request.json['user_id']
     prompt = request.json['prompt']
     print("asd")
-    path = str(os.getcwd())+'//chats//'+ids+'.json'
+    path = str(os.getcwd())+'//chats//'+str(ids)+'.json'
     # path = str(os.getcwd())+'\\'+"5467484.json"
     isexist = os.path.exists(path)
     if isexist:
