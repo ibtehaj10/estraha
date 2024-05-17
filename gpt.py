@@ -192,22 +192,22 @@ def check_user():
 
             print('\n\nBacklist Found\n\n: ',reply)
 
-            try:
-                get = fetch_content_between_backticks(str(reply))
-                
-                print("We got Fetched from backlist : ",get)
-                listing = ""
-                jsons = str_to_json(str(get[0]))
-                print("We got JSON : ",jsons)
-                if jsons !=  'None':
-                    listing = findproperty_citywise(jsons['city'])
-                else:
-                    listing = 'None'
-                    print('Listing is NONE')
-            except:
-                # listing = None
-                print("JSON CANT BE FETCHED.....!!!")
-                pass
+            # try:
+            get = fetch_content_between_backticks(str(reply))
+            
+            print("We got Fetched from backlist : ",get)
+            listing = ""
+            jsons = str_to_json(str(get[0]))
+            print("We got JSON : ",jsons)
+            if jsons !=  'None':
+                listing = findproperty_citywise(jsons['city'])
+            else:
+                listing = 'None'
+                print('Listing is NONE')
+            # except:
+            #     # listing = None
+            #     print("JSON CANT BE FETCHED.....!!!")
+            #     pass
             
             if listing !=  'None':
                 print("we hare at 1")
