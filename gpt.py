@@ -11,6 +11,12 @@ from openai import OpenAI
 import json
 import jsonpickle
 # from PIL import Image
+import tiktoken
+enc = tiktoken.get_encoding("cl100k_base")
+assert enc.decode(enc.encode("hello world")) == "hello world"
+
+# To get the tokeniser corresponding to a specific model in the OpenAI API:
+enc = tiktoken.encoding_for_model("gpt-4-turbo")
 from flask_cors import CORS, cross_origin
 apikeys = apikey
 
@@ -34,7 +40,12 @@ def get_listing():
     json = response.json()
     return json['data']
 
-
+#################################################### COUNT TOKEN
+def num_tokens_from_string(string: str, encoding_name: str) -> int:
+    """Returns the number of tokens in a text string."""
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
 ######################################### Fetch Propertiies with respect to cites
 def findproperty_citywise(city):
     df = pd.DataFrame(get_listing())
@@ -85,8 +96,8 @@ def gpt(inp):
               """}
     new_inp = inp
     new_inp.insert(0,systems)
-    # print("inp : \n ",new_inp)
-    # openai.api_key = apikeys
+    count = num_tokens_from_string(str(new_inp), "cl100k_base")
+    print("Total Token Counts are : ",count)
     completion = client.chat.completions.create(
     model="gpt-4-turbo", 
     messages=new_inp
