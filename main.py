@@ -47,14 +47,15 @@ def gpt(inp,prompt):
               you are a propty recommendation assitant your job is to assist user from the given properties.
 IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLOW THE INSTRUCTIONS
 """}
+    new_inp = inp
+    new_inp.insert(0,systems)
     rcd = retrieve_combined_documents(prompt)
     print(rcd)
     if rcd != []:
         systems2 = {"role":"system","content":str(rcd)}
         new_inp.insert(1,systems2)
     
-        new_inp = inp
-    new_inp.insert(0,systems)
+
     
 
     print("inp : \n ",new_inp)
