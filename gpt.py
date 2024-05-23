@@ -69,8 +69,10 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
 
 
 def findproperty_citywise(city):
+    if city == "جدة":
+        city = "جده"
     js = get_listing()
-    js = filtered_data = [record for record in js if record['City'].lower() == 'الرياض']
+    js = filtered_data = [record for record in js if record['City'].lower() == city]
     url = 'https://www.estraha.com/property-detail/'
     for record in js:
         record['URL'] = url + str(record['property ID'])
