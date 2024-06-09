@@ -130,7 +130,7 @@ def gpt(inp,prompt):
     count = num_tokens_from_string(str(new_inp), "cl100k_base")
     print("Total Token Counts are : ",count)
     completion = client.chat.completions.create(
-    model="gpt-4-turbo", 
+    model="gpt-3.5-turbo", 
     messages=new_inp
     )
     return completion
