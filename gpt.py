@@ -160,7 +160,7 @@ def gpt(inp,prompt):
                Do not generate property data on your own 
                IMPORTANT : you are integrated in a website so act like html format while return string in user like use html tags as needed use <b> instead of ** and <br> in place of \n 
                and provide links in <a href=""> tag. always break the line after every property and name must be bold.
-               Each property must be in new line with S NO.
+               Each property must be in new line with S NO. Dont break like after S NO
               """}
     new_inp = inp
     rcd = retrieve_combined_documents(prompt)
