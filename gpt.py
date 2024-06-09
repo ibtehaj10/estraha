@@ -129,7 +129,7 @@ def gpt(inp,prompt):
  'Address': 'جدة ابحر الشماليه بجوار جامعة الاعمال والتكنلوجيا',
  'City': 'جده',
  'Region': 'الشمال',
- 'Swimming Pool': 'Yes',
+ 'pool': 'Yes',
  'Swimming Pool Description': '0',
  'Football Yard': 'Yes',
  'Singles': 'No',
