@@ -239,7 +239,7 @@ def check_user():
         
         reply = send.choices[0].message.content
         print("reply   ...............:  ",reply)
-        if "`" in str(reply):
+        if "`" in str(reply) or "{" in str(reply):
 
             print('\n\nBacklist Found\n\n: ',reply)
 
