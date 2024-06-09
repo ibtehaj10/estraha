@@ -216,7 +216,7 @@ def fetch_content_between_backticks(text):
     matches = re.findall(pattern, text)
     if matches == []:
         pattern = r"(.*?)"
-        matches = re.findall(pattern, text)
+        matches = text
     return matches
 
 
