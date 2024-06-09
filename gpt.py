@@ -68,17 +68,28 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
 
 
 
-def findproperty_citywise(city):
-    if city == "جدة":
-        city = "جده"
-        print("city : " ,city)
-    js = get_listing()
-    js = filtered_data = [record for record in js if record['City'].lower() == city]
+js =[]
+
+def findproperty_citywise(data):
+    if 'city' in data:
+        city = data['city']
+        if city == "جدة":
+            city = "جده"
+            print("city : " ,city)
+        js = get_listing()
+        js = filtered_data = [record for record in js if record['City'].lower() == city]
+    if 'region' in data:
+        region = data['region']
+        js = filtered_data = [record for record in js if record['Region'].lower() == region]
+    if 'pool' in data:
+      
+        js = filtered_data = [record for record in js if int(record['Swimming Pools']) >= 1]
     url = 'https://www.estraha.com/property-detail/'
-    for record in js:
-        record['URL'] = url + str(record['property ID'])
-        record['Description'] = []
-    if record == []:
+    # record = ''
+    for i in js:
+        i['URL'] = url + str(i['property ID'])
+        i['Description'] = []
+    if js == []:
         return "No Property found in this city"
     else:
         return str(js[:6])
@@ -281,7 +292,7 @@ def check_user():
             jsons = str_to_json(str(get[0]))
             print("We got JSON : ",jsons)
             if jsons !=  'None':
-                listing = findproperty_citywise(jsons['city'])
+                listing = findproperty_citywise(jsons)
             else:
                 listing = 'None'
                 print('Listing is NONE')
@@ -313,7 +324,7 @@ def check_user():
                 print("We got Fetched from backlist : ",get)
                 jsons = str_to_json(str(get[0]))
                 print("We got JSON : ",jsons)
-                listing = findproperty_citywise(jsons['city'])
+                listing = findproperty_citywise(jsons)
                 # return Response(reply, mimetype='text/html')
                 reply = reply.replace("<b>","<br><b>")
                 return {"message":reply,"status":"OK"}
