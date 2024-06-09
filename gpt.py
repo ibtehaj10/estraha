@@ -76,7 +76,7 @@ def findproperty_citywise(city):
     url = 'https://www.estraha.com/property-detail/'
     for record in js:
         record['URL'] = url + str(record['property ID'])
-    if property.empty:
+    if record == []:
         return "No Property found in this city"
     else:
         return str(js[:6])
