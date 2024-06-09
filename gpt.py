@@ -68,9 +68,10 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
 
 
 
-js =[]
+
 
 def findproperty_citywise(data):
+    js =[]
     if 'city' in data:
         city = data['city']
         if city == "جدة":
