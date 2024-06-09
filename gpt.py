@@ -119,8 +119,7 @@ def gpt(inp,prompt):
                when you have data in history then answer the questions of every query user do.
                Do not generate property data on your own 
                IMPORTANT : you are integrated in a website so act like html format while return string in user like use html tags as needed use <b> instead of ** and <br> in place of \n 
-               and provide links in <a href=""> tag. dont break line after number. always break line before number.
-    
+               and provide links in <a href=""> tag. always break the line after every property and name must be bold
               """}
     new_inp = inp
     rcd = retrieve_combined_documents(prompt)
