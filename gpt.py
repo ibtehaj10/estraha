@@ -112,13 +112,14 @@ def gpt(inp,prompt):
               for e.g:IMPORTANT  `{"city":"مكه"}`   '`' is important you'll get data when you use,  don't send any region or anything else with city name`
              IMPORTANT :  Do not generate any property details from your data use our data only if you dont get any property just say you dont find the property in database.
              \
-             when you have all the properties then recommend it to user with some details and  URLs in a proper message then answer the questions related to data 
+             when you have all the properties then recommend it to user with some details and  URLs in a proper message then answer the questions related to data and apply all filters like if user wants property from south
+             give him south property. 
             IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLOW THE INSTRUCTIONS
                
                when you have data in history then answer the questions of every query user do.
                Do not generate property data on your own 
                IMPORTANT : you are integrated in a website so act like html format while return string in user like use html tags as needed use <b> instead of ** and <br> in place of \n 
-               and provide links in <a href=""> tag
+               and provide links in <a href=""> tag. dont break line after number. always break line before number.
     
               """}
     new_inp = inp
