@@ -112,8 +112,8 @@ def gpt(inp,prompt):
               for e.g:IMPORTANT  `{"city":"مكه"}`   '`' is important you'll get data when you use,  don't send any region or anything else with city name`
              IMPORTANT :  Do not generate any property details from your data use our data only if you dont get any property just say you dont find the property in database.
              \
-             when you have all the properties then recommend it to user with some details and  URLs in a proper message then answer the questions related to data and apply all filters like if user wants property from south
-             give him south property. 
+             when you have all the properties then recommend it to user with some details and  URLs in a proper message then answer the questions related to data and apply all filters like
+             if user wants property from south give him south property. propety type, pool yes or no and  all others 
             IMPORTANT TO ASNWER IN ARABIC AND DO NOT GENERATE ANY PROPERTY ON YOUR OWN FOLLOW THE INSTRUCTIONS
                
                when you have data in history then answer the questions of every query user do.
