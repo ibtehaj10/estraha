@@ -161,6 +161,7 @@ def gpt(inp,prompt):
                IMPORTANT : you are integrated in a website so act like html format while return string in user like use html tags as needed use <b> instead of ** and <br> in place of \n 
                and provide links in <a href=""> tag. always break the line after every property and name must be bold.
                Each property must be in new line with S NO.IMPORTANT  Dont break line after S NO only before S NO or after property details 
+               you're integrated with https://estraha.com/ website so you only provide data from this
               """}
     new_inp = inp
     rcd = retrieve_combined_documents(prompt)
